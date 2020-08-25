@@ -1,0 +1,9 @@
+---
+- name: simple ansible ping to do some testing
+  hosts: localhost
+  gather_facts: false
+  become: false
+  remote_user: ansible
+  tasks:
+    - name: test connection to managed hosts via ansible ping
+      ping:
