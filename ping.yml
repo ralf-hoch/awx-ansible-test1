@@ -1,6 +1,6 @@
 ---
 - name: simple ansible ping to do some testing
-  hosts: localhost
+  hosts: all
   gather_facts: false
   become: false
   remote_user: ansible
