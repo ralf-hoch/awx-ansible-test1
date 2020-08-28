@@ -1,7 +1,7 @@
 [prod]
-ansible2
+ansible2 ansible_host:192.168.178.222
 
 [test]
-ansible3
+ansible3 ansible_host:192.168.178.223
 
 
