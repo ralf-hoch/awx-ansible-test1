@@ -3,7 +3,10 @@
   hosts: all
   gather_facts: false
   become: false
-  remote_user: ansible
   tasks:
-    - name: test connection to managed hosts via ansible ping [I changed this to test project - update revision on launch]
+    - name: test connection to managed hosts via ansible ping
       ping:
+
+    - name: gather facts with subset set to '!all'
+      setup:
+        gather_subset: '!all'
