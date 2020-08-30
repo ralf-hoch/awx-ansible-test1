@@ -4,8 +4,8 @@
   gather_facts: false
   become: false
   tasks:
-          #    - name: test connection to managed hosts via ansible ping
-          #    ping:
+    - name: test connection to managed hosts via ansible ping
+      ping:
 
     - name: gather facts with subset set to '!all'
       setup:
