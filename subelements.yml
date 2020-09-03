@@ -1,0 +1,33 @@
+---
+- name: test subelements filter
+  hosts: localhost
+  gather_facts: false
+  become: false
+  vars:
+    users:
+      - name: alice
+        authorized:
+          - /tmp/alice/onekey.pub
+          - /tmp/alice/twokey.pub
+        groups:
+          - wheel
+          - docker
+      - name: bob
+        #authorized:
+        #  - /tmp/bob/id_rsa.pub
+        groups:
+          - dockerusers
+  tasks:
+    - name: test subelements 'authorized'
+      debug:
+        msg: "{{ item[0]['name'] }} {{ item[1] }}"
+      loop: "{{ users | subelements('authorized', skip_missing=true) }}"
+
+    - name: test subelements 'groups'
+      debug:
+        msg: "{{ item[0]['name'] }} {{ item[1] }}"
+      loop: "{{ users | subelements('groups', skip_missing=true) }}"
+      
+    - name: type_debug users
+      debug:
+        msg: "{{ users | type_debug }}"

@@ -1,0 +1,41 @@
+---
+- name: test filter map and flatten
+  hosts: localhost
+  gather_facts: false
+  become: false
+  vars:
+    my_list: []
+    public_key_lists:
+      - username: johnd
+        public_keys:
+          - pubkeys/johnd/id_rsa.pub
+          - pubkeys/johnd/laptop_rsa.pub
+      - username: janed
+        public_keys:
+          - pubkeys/janed/id_rsa.pub
+  tasks:
+    - name: test map and flatten
+      debug:
+        msg: "{{ item }}"
+      loop: "{{ public_key_lists | map(attribute='public_keys') | flatten }}"
+
+    - name: do the same with subelements
+      debug:
+        msg: "{{ item[1] }}"
+      loop: "{{ public_key_lists | subelements('public_keys', skip_missing=true) }}"
+
+    - name: do the same with lookup('subelements')
+      debug:
+        msg: "{{ item[1] }}"
+      loop: "{{ lookup('subelements', public_key_lists, 'public_keys', skip_missing=true) }}"
+
+
+
+    - name: create a list of the subelements
+      set_fact:
+        my_list: "{{ my_list + [item[1]] }}"
+      loop: "{{ public_key_lists | subelements('public_keys', skip_missing=true) }}"
+
+    - name: display my_list
+      debug:
+        var: my_list

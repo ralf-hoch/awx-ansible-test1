@@ -1,0 +1,34 @@
+---
+- name: test iterating over a dictionary
+  hosts: localhost
+  gather_facts: false
+  become: false
+  vars:
+    users:
+      demo1:
+        name: Demo User 1
+        mail: demo1@example.com
+        phone: "3-12345"
+      demo2:
+        name: Demo User 2
+        mail: demo2@example.com
+        phone: "2-234923"
+      demo3:
+        name: Demo User 3
+        mail: demo3@example.com
+        phone: "3-403893"
+  tasks:
+    - name: Iterate over Users using with_dict
+      debug:
+        msg: "name: {{ item['key'] }} mail {{ item['value']['mail'] }}"
+      with_dict: "{{ users }}"
+    - name: Iterate over Users using loop and dict2items
+      debug:
+        msg: "name: {{ item['key'] }} mail {{ item['value']['mail'] }}"
+      loop: "{{ users | dict2items }}"
+    - name: type_debug users.demo1
+      debug:
+        msg: "{{ users['demo1'] | type_debug }}"
+    - name: type_debug users
+      debug:
+        msg: "{{ users | type_debug }}"

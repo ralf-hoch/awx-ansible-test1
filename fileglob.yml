@@ -1,0 +1,25 @@
+---
+- name: test iterating over file globbing pattern
+  hosts: localhost
+  gather_facts: false
+  become: false
+  vars:
+    fileglob_path: '/Users/r_hoch@de.ibm.com/documents/GitHub/create_vm/*'
+  tasks:
+    - name: test fileglob lookup plugin with lookup
+      debug:
+        msg: "{{ lookup('fileglob', fileglob_path) }}"
+
+    - name: test fileglob lookup plugin with query
+      debug:
+        msg: "{{ query('fileglob', fileglob_path) }}"
+
+    - name: iteration with loop
+      debug:
+        msg: "{{ item }}"
+      loop: "{{ query('fileglob', fileglob_path) }}"
+
+    - name: iteration with with_fileglob
+      debug:
+        msg: "{{ item }}"
+      with_fileglob: "{{ fileglob_path }}"
