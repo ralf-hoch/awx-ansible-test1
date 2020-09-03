@@ -1,0 +1,21 @@
+---
+- name: test ipaddr filter options
+  hosts: localhost
+  gather_facts: false
+  become: false
+  tasks:
+    - name: gather network facts from managed host
+      setup:
+        gather_subset:
+          - '!all'
+          - network
+      register: network_facts
+
+    - name: display network_facts
+      debug:
+        var: ansible_facts['interfaces']
+
+    - name: test lookup dig
+      debug:
+        var: "{{ lookup('dig', 'www.heise.de') }}"
+

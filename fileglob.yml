@@ -4,7 +4,7 @@
   gather_facts: false
   become: false
   vars:
-    fileglob_path: '/Users/r_hoch@de.ibm.com/documents/GitHub/create_vm/*'
+    fileglob_path: '~/*'
   tasks:
     - name: test fileglob lookup plugin with lookup
       debug:
