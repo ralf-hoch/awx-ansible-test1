@@ -1,0 +1,42 @@
+---
+- name: test awx / tower api
+  hosts: localhost
+  gather_facts: false
+  become: false
+  vars_files:
+    - tower_cred.yml
+  vars:
+    tower: 192.168.178.221
+    template_name: Demo Job Template
+  tasks:
+    - name: get personal authentication token
+      uri:
+        url: "http://{{ tower }}/api/v2/users/1/personal_tokens/"
+        method: POST
+        validate_certs: false
+        return_content: true
+        user: "{{ tower_user }}"
+        password: "{{ tower_pass }}"
+        force_basic_auth: true
+        status_code: 201
+      register: token_response
+
+    - name: display token request response
+      debug:
+        msg: "token ID: {{ token_response['json']['id'] }} token: {{ token_response['json']['token'] }}"
+
+    - name: use the token
+      uri:
+        url: "http://{{ tower }}/api/v2/job_templates/{{ template_name | urlencode }}/launch/"
+        method: POST
+        validate_certs: false
+        return_content: true
+        status_code: 201
+        headers:
+          Authorization: "Bearer {{ token_response['json']['token'] }}"
+          Content-Type: "application/json"
+      register: launch_response
+
+    - name: display launch request response
+      debug:
+        msg: "job ID: {{ launch_response['json']['id'] }}"
