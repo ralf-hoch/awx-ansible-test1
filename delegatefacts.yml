@@ -1,0 +1,19 @@
+---
+- name: test delegate and delegate facts
+  hosts: localhost
+  gather_facts: false
+  become: false
+  tasks:
+    - name: set fact in delegated task on server ansible2
+      set_fact:
+        myfact: Where am I set?
+      delegate_to: ansible2
+      #delegate_facts: true
+
+    - name: display the facts from server ansible2
+      debug:
+        msg: "{{ hostvars['ansible2']['myfact'] | default(omit) }}" 
+
+    - name: display the facts from localhost
+      debug:
+        msg: "{{ hostvars['localhost']['myfact'] | default(omit) }}"

@@ -1,0 +1,38 @@
+---
+- name: test interaction with tower api
+  hosts: localhost
+  gather_facts: false
+  become: false
+  vars:
+    job_template_pattern: "AWX"
+  tasks:
+    - name: request job template list based on job_template_pattern
+      uri:
+        url: "http://192.168.178.221/api/v2/job_templates/?search={{ job_template_pattern }}"
+        method: GET
+        validate_certs: false
+        return_content: true
+        force_basic_auth: true
+        user: "admin"
+        password: "Ralf4Linux#"
+        status_code: 200
+      register: job_template_list
+
+    - name: display job template list
+      debug:
+              #var: job_template_list.json.results[0]
+        msg: "Template name: {{ item.name }} Template ID: {{ item.id }}"
+      loop: "{{ job_template_list.json.results }}"
+
+    - name: launch jobs based on job template list
+      uri:
+        url: "http://192.168.178.221/api/v2/job_templates/{{ item.id }}/launch/"
+        method: POST
+        validate_certs: false
+        return_content: true
+        force_basic_auth: true
+        user: "admin"
+        password: "Ralf4Linux#"
+        status_code: 201
+      loop: "{{ job_template_list.json.results }}"
+

@@ -1,0 +1,4 @@
+ansible2 time: Fri Sep  4 21:14:41 CEST 2020
+ansible3 time: Fri Sep  4 21:14:43 CEST 2020
+ansible2 time: Fri Sep  4 21:15:19 CEST 2020
+ansible3 time: Fri Sep  4 21:15:21 CEST 2020

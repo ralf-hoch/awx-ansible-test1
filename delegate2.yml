@@ -1,0 +1,20 @@
+---
+- name: test delegate facts
+  hosts: localhost
+  gather_facts: false
+  become: false
+  tasks:
+    - name: gather facts from other hosts
+      setup:
+      delegate_to: "{{ item }}"
+      #delegate_facts: true
+      loop: "{{ groups['all'] }}"
+
+    - name: display facts gathered from delegate hosts
+      debug:
+        msg: "{{ hostvars[item]['ansible_facts']['default_ipv4']['address'] | default(omit) }}"
+      loop: "{{ groups['all'] }}"
+
+    - name: display facts from localhost
+      debug:
+        msg: "{{ ansible_facts }}"

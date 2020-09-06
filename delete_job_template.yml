@@ -1,0 +1,23 @@
+---
+- name: delete awx job template via API
+  hosts: localhost
+  gather_facts: false
+  become: false
+  vars_files:
+    - tower_cred.yml
+  vars:
+    tower: 192.168.178.221
+    job_template_source: "ping_test"
+    job_template_target: "ping_test_copy"
+  tasks:
+    - name: dlete job template
+      uri:
+        url: "http://{{ tower }}/api/v2/job_templates/{{ job_template_target | urlencode }}/"
+        method: DELETE
+        validate_certs: false
+        return_content: true
+        force_basic_auth: true
+        user: "{{ tower_user }}"
+        password: "{{ tower_pass }}"
+        status_code: 204
+      register: delete_result

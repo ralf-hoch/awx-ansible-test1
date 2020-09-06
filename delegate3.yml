@@ -1,0 +1,16 @@
+---
+- name: test delegate
+  hosts: all
+  gather_facts: false
+  become: false
+  tasks:
+    - name: take time on managed host
+      shell: 'date'
+      register: date
+      changed_when: false
+
+    - name: save times to localhost
+      vars:
+        record: "{{ inventory_hostname }} time: {{ date.stdout_lines[0] }}"
+      shell: "echo '{{ record }}' >> /home/ansible/awx-ansible-test1/times.txt"
+      delegate_to: localhost
