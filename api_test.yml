@@ -3,6 +3,8 @@
   hosts: localhost
   gather_facts: false
   become: false
+  vars_files:
+    - tower_cred.yml
   vars:
     job_template_pattern: "AWX"
   tasks:
@@ -13,8 +15,8 @@
         validate_certs: false
         return_content: true
         force_basic_auth: true
-        user: "admin"
-        password: "Ralf4Linux#"
+        user: "{{ tower_user }}
+        password: "{{ tower_pass }}"
         status_code: 200
       register: job_template_list
 
@@ -31,8 +33,8 @@
         validate_certs: false
         return_content: true
         force_basic_auth: true
-        user: "admin"
-        password: "Ralf4Linux#"
+        user: "{{ tower_user }}"
+        password: "{{ tower_pass }}"
         status_code: 201
       loop: "{{ job_template_list.json.results }}"
 
