@@ -15,7 +15,7 @@
         validate_certs: false
         return_content: true
         force_basic_auth: true
-        user: "{{ tower_user }}
+        user: "{{ tower_user }}"
         password: "{{ tower_pass }}"
         status_code: 200
       register: job_template_list
